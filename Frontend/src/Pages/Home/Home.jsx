@@ -18,7 +18,9 @@ function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('api/auth/register', formData);
+      const backendApi = import.meta.env.VITE_BACKEND_API;
+      const requestUrl = `${backendApi}/auth/register`;
+      const response = await axios.post(requestUrl, formData);
       console.log(response.data);
     } catch (error) {
       console.error('Registration error:', error);
