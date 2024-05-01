@@ -13,7 +13,7 @@ let userSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
     },
-    useName: {
+    userName: {
       type: String,
       required: true,
       trim: true,
@@ -38,6 +38,8 @@ let userSchema = new mongoose.Schema(
     },
     phone: {
       type: Number,
+      maxlength:10,
+      minlength:10,
     },
     group: [{ type: mongoose.Types.ObjectId, ref: "Group",
     // autopopulate:true 
@@ -47,10 +49,20 @@ let userSchema = new mongoose.Schema(
     // autopopulate:true
    }],
 
-    friend: [{ type: mongoose.Types.ObjectId, ref: "Friend",
+    friend: [{ type: mongoose.Types.ObjectId, ref: "User",
     // autopopulate:true 
   }],
-
+   friendRequest:[{
+    from:{
+      type:mongoose.Types.ObjectId,
+      ref:"User"
+    },
+    status:{
+      type:String,
+      enum:["pending","accepted","rejected"],
+      default:"pending"
+    }
+   }],
     notification: [{ type: mongoose.Types.ObjectId, ref: "Notification",
     // autopopulate:true 
   }],

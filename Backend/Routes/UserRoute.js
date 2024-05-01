@@ -2,44 +2,55 @@ const express = require('express')
 const router = express.Router();
 const User = require('../Models/UserModel')
 const argon2 = require('argon2');
+const jwt = require('jsonwebtoken')
+const path = require('path')
+const dotenv = require('dotenv').config({path: path.resolve(__dirname,'../.env')})
 
 router.post('/register',async (req,res)=>{
   let {firstName,lastName,userName,password,email} = req.body;
   try{
-    let Username = await User.find({userName});
-  let Email = await User.find({email});
+    let Username = await User.findOne({userName});
+  let Email = await User.findOne({email});
   if(Username){
-    res.json({msg:"username already exists"});
+    return res.json("username exist");
   }
-  if(Email){
-    res.json({msg:"email already exists"})
+  else if(Email){
+    return res.json("email exist")
   }
   let newPassword = await argon2.hash(password);
   password = newPassword;
-  let user = await User.create({firstName,lastName,userName,password,email})
-  res.json({msg:"success"});
+  let user = new User({firstName,lastName,userName,password,email})
+  await user.save();
+  res.json('success');
   }
   catch(e){
     console.log("Failed register new user: ",e);
-    // res.json({msg:"Failed Register User"});
+    res.json("Failed Register");
   }
 })
 
 router.post('/login',async (req,res)=>{
   let {userName,password} = req.body;
   try{
-    let user = await User.find({userName});
+    let user = await User.findOne({userName});
     if(!user){
-      return res.json({msg:"username does not exists"})
+      return res.json("username not exist")
     }
     let verifyPassword = user.password;
     if(await argon2.verify(verifyPassword,password)){
-      res.json({msg:"success"});
+      const payload = {
+        userId: user._id,
+        username:user.userName,
+      }
+      const token = jwt.sign(payload,process.env.ACCESS_TOKEN_SECRET,{expiresIn:'3h'});
+      res.json({msg:token})
+    }else{
+      res.json("Incorrect Password");
     }
   }
   catch(e){
     console.log("Failed to login user: ",e);
-    res.json({msg:"Failed Login User"});
+    res.json("Failed Login User");
   }
 })
 
