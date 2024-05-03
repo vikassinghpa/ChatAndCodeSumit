@@ -3,7 +3,8 @@ const router = express.Router();
 const User = require('../Models/UserModel')
 const argon2 = require('argon2');
 const jwt = require('jsonwebtoken')
-const path = require('path')
+const path = require('path');
+const { authenticateToken } = require('../middleware');
 const dotenv = require('dotenv').config({path: path.resolve(__dirname,'../.env')})
 
 router.post('/register',async (req,res)=>{
@@ -43,7 +44,7 @@ router.post('/login',async (req,res)=>{
         username:user.userName,
       }
       const token = jwt.sign(payload,process.env.ACCESS_TOKEN_SECRET,{expiresIn:'3h'});
-      res.json({msg:token})
+      res.json(token)
     }else{
       res.json("Incorrect Password");
     }

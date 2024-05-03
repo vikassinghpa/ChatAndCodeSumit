@@ -36,30 +36,6 @@ router.post('/add-post',authenticateToken,async(req,res)=>{
   }
 })
 
-router.put('/update-post/:id',authenticateToken,isPostOwner,async(req,res)=>{
-  let userId = req.user.userId;
-  let {id}= req.params;
-  let {title,upload,desc} = req.body;
-try{
-let user = await User.findById(userId);
-if(!user){
-  return res.status(404).json("Not Found User");
-}
-let newPost = await Post.findById(id);
-if(!newPost){
-  return res.status(404).json("Not Found Post")
-}
-newPost = await Post.findByIdAndUpdate(id,{title,upload,desc});
-await newPost.save();
-await user.save();
-res.status(200).json("Success");
-}
-catch(e){
-  console.log("failed update post error: ",e);
-  res.status(500).json("Internal Error");
-}
-})
-
 router.delete('/delete-post/:id',authenticateToken,isPostOwner, async(req,res)=>{
   let userId = req.user.userId;
   let {id} = req.params;

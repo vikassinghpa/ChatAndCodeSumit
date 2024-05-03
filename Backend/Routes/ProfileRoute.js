@@ -28,7 +28,7 @@ try{
   if(!user){
     return res.status(404).json("Not Found");
   }
-  user = await User.findByIdAndUpdate(userId,{firstName,lastName,email,phone});
+ user = await User.findByIdAndUpdate(userId,{firstName,lastName,email,phone})
   await user.save();
   res.status(200).json(user);
 }
