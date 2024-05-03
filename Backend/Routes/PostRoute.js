@@ -1,6 +1,7 @@
 const express = require('express');
 const User = require('../Models/UserModel');
 const Post = require('../Models/PostModel');
+const Notification = require('../Models/Notification');
 const { authenticateToken ,isPostOwner} = require('../middleware');
 const router = express.Router();
 
@@ -28,6 +29,22 @@ router.post('/add-post',authenticateToken,async(req,res)=>{
    await newPost.save();
    await user.post.push(newPost);
    await user.save();
+   let friends = user.friend;
+   console.log("friends: ",friends);
+   friends.forEach(async friend => {
+    console.log("friend: ",friend);
+    var msg = "New Post added by the ";
+    msg += user.firstName;
+    let notification = new Notification({
+      receiver : friend._id,
+      sender : user._id,
+      message : msg,
+      status :"addPost"
+    })
+    console.log("notification: ",notification);
+    await notification.save();
+    await User.findByIdAndUpdate(friend._id,{$push:{notification:notification._id}});
+   });
    res.json("Success");
   }
   catch(e){

@@ -7,7 +7,7 @@ const {authenticateToken} = require('../middleware');
 router.get('/profile',authenticateToken,async(req,res)=>{
   let userId = req.user.userId;
   try{
-    let user = await User.findById(userId).populate('education');
+    let user = await User.findById(userId,'firstName lastName email userName phone').populate('education');
     if(!user){
       return res.status(404).json("Not Found");
     }
@@ -30,7 +30,7 @@ try{
   }
  user = await User.findByIdAndUpdate(userId,{firstName,lastName,email,phone})
   await user.save();
-  res.status(200).json(user);
+  res.status(200).json("Success");
 }
 catch(e){
   console.log("Failed to update profile error: ",e);

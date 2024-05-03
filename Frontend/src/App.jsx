@@ -1,6 +1,5 @@
 import React from 'react'
 import { Routes,Route } from 'react-router-dom'
-import Navbar from './Components/Navbar/Navbar'
 import Home from './Pages/Home/Home'
 import Register from './Pages/Auth/Register'
 import Login from './Pages/Auth/Login'
@@ -11,6 +10,7 @@ import UpdateProfile from './Pages/Profile/UpdateProfile'
 import ViewPost from './Pages/Post/ViewPost'
 import AddPost from './Pages/Post/AddPost'
 import Suggestion from './Pages/Home/Suggestion'
+import Notify from './Pages/Home/Notify'
 
 function App() {
   return (
@@ -26,6 +26,7 @@ function App() {
         <Route path='/user/my-posts' element={<ViewPost/>}/>
         <Route path='/user/add-post' element={<AddPost/>}/>
         <Route path='/user/friends' element={<Suggestion/>}/>
+        <Route path='/user/notifications' element={<Notify/>}/>
       </Routes>
     </div>
   )
