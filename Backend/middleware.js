@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv').config();
 const Post = require('./Models/PostModel');
+const Notification = require('./Models/Notification');
 
 const authenticateToken = (req,res,next)=>{
  const authHeader = req.headers['authorization'];

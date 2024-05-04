@@ -18,5 +18,18 @@ router.get('/notifications',authenticateToken,async(req,res)=>{
   }
 })
 
+router.delete('/notification/:id',authenticateToken,async(req,res)=>{
+  let userId = req.user.userId;
+  let {id} = req.params;
+  try{
+  await User.findOneAndUpdate({_id:userId},{$pull:{notification:id}});
+  await Notification.findOneAndDelete({_id:id});
+  res.status(200).json("Success")
+  }
+  catch(e){
+    console.log("error in delete notification: ",e);
+    res.status(500).json("Internal Error");
+  }
+})
 
 module.exports = router;

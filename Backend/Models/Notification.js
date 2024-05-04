@@ -16,7 +16,7 @@ const notificationSchema = new mongoose.Schema(
   },
   status:{
     type:String,
-    enum:["addPost","likePost","sendRequest","acceptRequest","rejectRequest"],
+    enum:["addPost","likePost","deletePost","sendRequest","acceptRequest","rejectRequest"],
     default:"sendRequest"
   }
 },{timestamps:true})

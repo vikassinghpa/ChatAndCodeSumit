@@ -30,18 +30,14 @@ router.post('/add-post',authenticateToken,async(req,res)=>{
    await user.post.push(newPost);
    await user.save();
    let friends = user.friend;
-   console.log("friends: ",friends);
    friends.forEach(async friend => {
-    console.log("friend: ",friend);
-    var msg = "New Post added by the ";
-    msg += user.firstName;
+    console.log("friend user: " ,friend.userName," _id: ",friend._id);
     let notification = new Notification({
       receiver : friend._id,
       sender : user._id,
-      message : msg,
+      message : " added a New Post.",
       status :"addPost"
     })
-    console.log("notification: ",notification);
     await notification.save();
     await User.findByIdAndUpdate(friend._id,{$push:{notification:notification._id}});
    });
@@ -67,6 +63,17 @@ if(!post){
 }
 user = await User.findByIdAndUpdate(userId,{$pull:{post:id}});
 await Post.findByIdAndDelete(id);
+let friends = user.friend;
+   friends.forEach(async friend => {
+    let notification = new Notification({
+      receiver : friend._id,
+      sender : user._id,
+      message : " deleted a Post.",
+      status :"deletePost"
+    })
+    await notification.save();
+    await User.findByIdAndUpdate(friend._id,{$push:{notification:notification._id}});
+   });
 res.status(200).json("Success");
 }
 catch(e){
