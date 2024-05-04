@@ -26,7 +26,7 @@ const loggedOut =()=>{
       <ul className='h-14 w-screen items-center flex justify-around text-2xl list-none bg-yellow-600'>
         <li className='text-3xl px-2'><h2>FriendsBook</h2></li>
         <li className='px-2'><Link to={'/'}>Home</Link></li>
-        <li className='px-2'><Link to={'/user/friends'}>Friends</Link></li>
+        <li className='px-2'><Link to={'/user/friend-request'}>Friends</Link></li>
         {isLogIn ? (
           <>
           <li><Account/></li>

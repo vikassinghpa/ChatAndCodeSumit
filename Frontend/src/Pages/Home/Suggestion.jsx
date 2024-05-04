@@ -29,7 +29,9 @@ function Suggestion() {
      if(res.data == 'Success'){
       alert("send the requested successfully");
      }else if(res.data == 'Already Sent'){
-      alert("You already sent friend request to him/her.")
+      alert("You already sent friend request to him/her.");
+     }else if(res.data == 'Already Friend'){
+      alert("he/she is already your friend.");
      }
     })
     .catch((e)=>{
