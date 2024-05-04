@@ -6,7 +6,9 @@ function Notify() {
   let [data,setData] = useState([]);
   const backendApi = import.meta.env.VITE_BACKEND_API;
   useEffect(()=>{
-    async function getData(){
+    getData();
+  },[])
+  async function getData(){
     const requestUrl = `${backendApi}/user/notifications`;
     await axiosInstances.get(requestUrl)
     .then((res)=>{
@@ -18,15 +20,14 @@ function Notify() {
       console.log("failed to get notifications axios error: ",e);
     })
     }
-    getData();
-  },[])
- 
+    
   async function handleAccept(receiverId){
     const requestUrl = `${backendApi}/user/accept-request`;
   await axiosInstances.post(requestUrl,{receiverId})
   .then((res)=>{
   if(res.data == 'Success'){
     alert("Friend request accepted successfully");
+    getData();
   }else if(res.data == 'Already Exist'){
     alert("Already your friend in your Friendlist.")
   }
@@ -42,6 +43,7 @@ function Notify() {
     .then((res)=>{
     if(res.data == 'Success'){
       alert("Friend request rejected successfully");
+      getData();
     }
     })
     .catch((e)=>{
@@ -55,6 +57,7 @@ function Notify() {
     .then((res)=>{
       if(res.data == "Success"){
         alert("Successfully deleted Notification");
+        getData();
       }
     })
     .catch((e)=>{

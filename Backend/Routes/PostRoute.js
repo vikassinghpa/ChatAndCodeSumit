@@ -31,7 +31,6 @@ router.post('/add-post',authenticateToken,async(req,res)=>{
    await user.save();
    let friends = user.friend;
    friends.forEach(async friend => {
-    console.log("friend user: " ,friend.userName," _id: ",friend._id);
     let notification = new Notification({
       receiver : friend._id,
       sender : user._id,

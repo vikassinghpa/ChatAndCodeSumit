@@ -56,7 +56,7 @@ function Login() {
         <div>
           <button type="submit" className="bg-blue-500 text-white rounded-md px-4 py-2 w-full hover:bg-blue-600"> Login </button>
         </div>
-        <p className='text-xl'>Do not have a account ? Click to <span className='text-blue-600'><Link to={'/auth/login'}>Sign up</Link></span></p>
+        <p className='text-xl'>Do not have a account ? Click to <span className='text-blue-600'><Link to={'/auth/register'}>Sign up</Link></span></p>
       </form>
     </div>
     </>

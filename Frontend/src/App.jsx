@@ -12,6 +12,7 @@ import AddPost from './Pages/Post/AddPost'
 import Suggestion from './Pages/Home/Suggestion'
 import Notify from './Pages/Home/Notify'
 import FriendRequest from './Pages/Request/FriendRequest'
+import FriendList from './Pages/Request/FriendList'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path='/user/add-post' element={<AddPost/>}/>
         <Route path='/user/friends' element={<Suggestion/>}/>
         <Route path='/user/friend-request' element={<FriendRequest/>}/>
+        <Route path='/user/friend-list' element={<FriendList/>}/>
         <Route path='/user/notifications' element={<Notify/>}/>
       </Routes>
     </div>

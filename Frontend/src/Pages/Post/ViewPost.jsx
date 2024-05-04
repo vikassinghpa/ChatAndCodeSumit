@@ -7,18 +7,18 @@ function ViewPost() {
   let [data ,setData] = useState([]);
   const BackendAPI = import.meta.env.VITE_BACKEND_API;
   useEffect(()=>{
-    async function getData(){
-      const requestUrl = `${BackendAPI}/user/my-posts`;
-    await axiosInstances.get(requestUrl)
-    .then((res)=>{
-    setData(res.data);
-    })
-    .catch((e)=>{
-      console.log("failed to access all posts axios error: ",e);
-    })
-    }
     getData();
   },[])
+  async function getData(){
+    const requestUrl = `${BackendAPI}/user/my-posts`;
+  await axiosInstances.get(requestUrl)
+  .then((res)=>{
+  setData(res.data);
+  })
+  .catch((e)=>{
+    console.log("failed to access all posts axios error: ",e);
+  })
+  }
 
   async function handleDelete(id){
     const deleteUrl = `${BackendAPI}/user/delete-post/${id}`;
@@ -26,6 +26,7 @@ function ViewPost() {
     .then((res)=>{
      if(res.data == 'Success'){
       alert("Post deleted Successfully.")
+      getData();
      }
     })
     .catch((e)=>{

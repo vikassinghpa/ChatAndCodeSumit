@@ -8,9 +8,10 @@ router.get('/friends',authenticateToken,async(req,res)=>{
 let userId = req.user.userId;
 try{
   let user = await User.findById(userId);
-  let allUser = await User.find({}).select('firstName lastName userName');
-  let suggested = await allUser.filter(x => x._id != userId);
-  // await suggested.save();
+ // let allUser = await User.find({}).select('firstName lastName userName email friend');
+  // let suggested = allUser.filter(x => x._id != userId);
+  let friendsUser = user.friend;
+  let suggested = await User.find({_id:{$nin:[userId,...friendsUser]}}).select('firstName lastName userName email');
   res.status(200).json(suggested);
 }
 catch(e){
@@ -19,6 +20,18 @@ catch(e){
 }
 })
 
+router.get('/friend-list',authenticateToken,async(req,res)=>{
+  let userId = req.user.userId;
+  try{
+    let user = await User.findById(userId).select('firstName lastName userName email').populate({path:'friend',select:'firstName lastName userName email'});
+    let friends = user.friend;
+    res.status(200).json(friends);
+  }
+  catch(e){
+    console.log("failed to load friends list: ",e);
+    res.status(500).json("Internal Error");
+  }
+})
 router.get('/friend-request',authenticateToken,async(req,res)=>{
   let userId = req.user.userId;
   try{
