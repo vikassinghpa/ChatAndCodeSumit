@@ -29,6 +29,8 @@ function Login() {
         }else if(res.status == 200){
          const token = res.data;
          localStorage.setItem('token',token);
+         const expirationTime = Date.now() + 3*60*60*1000;
+         localStorage.setItem('expirationTime',expirationTime);
          setTimeout(()=>{
           localStorage.removeItem(token);
          },3*60*60*1000);
@@ -60,7 +62,6 @@ function Login() {
       </form>
     </div>
     </>
-    
   );
 }
 

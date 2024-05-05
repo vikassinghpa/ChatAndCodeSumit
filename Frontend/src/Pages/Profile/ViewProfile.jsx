@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import axiosInstances from '../../Components/Instances/AxiosInstances';
 import Navbar from '../../Components/Navbar/Navbar';
 
+
 function ViewProfile() {
   let [data,setData] = useState(null);
+  let [pictureLoad,setPictureLoad] = useState(false);
   const backendApi = import.meta.env.VITE_BACKEND_API;
   useEffect(()=>{
     async function getData(){
@@ -36,9 +38,19 @@ function ViewProfile() {
   return (
     <div>
       <Navbar/>
-      <button className='bg-gray-300 text-gray-800 mt-2 py-2 px-4 rounded-md mb-2'><Link to={'/user/update-profile'}>Update Profile</Link></button>
+      
      {data ? (
      <div>
+      {data.photo && !pictureLoad ?
+      (
+        <>
+        <img src={data.photo} onError={()=>setPictureLoad(true)} className='w-50 h-50'/>
+        </>
+      ):(
+        <>
+        <img src="/Assets/profile.png" className='w-32 h-32 border border-black rounded-md'/>
+        </>
+      )}
       <h2>Firstname: {data.firstName}</h2>
       <h2>Lastname: {data.lastName}</h2>
       <h2>Username: {data.userName}</h2>
@@ -60,6 +72,7 @@ function ViewProfile() {
         <p>Want to add Educational Qualification ? <button className='bg-blue-300 text-blue-800 rounded-md mt-2 py-2 px-4'><Link to={'/user/add-education'}>Add Education</Link></button></p>
       )}
       </div>
+       <button className='bg-gray-300 text-gray-800 mt-2 py-2 px-4 rounded-md mb-2 '><Link to={'/user/update-profile'}>Update Profile</Link></button>
      </div>
      ):(
       <p>Loading...</p>

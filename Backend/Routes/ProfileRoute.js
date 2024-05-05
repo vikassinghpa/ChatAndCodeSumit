@@ -7,7 +7,7 @@ const {authenticateToken} = require('../middleware');
 router.get('/profile',authenticateToken,async(req,res)=>{
   let userId = req.user.userId;
   try{
-    let user = await User.findById(userId,'firstName lastName email userName phone').populate('education');
+    let user = await User.findById(userId,'firstName lastName email userName phone photo').populate('education');
     if(!user){
       return res.status(404).json("Not Found");
     }
@@ -22,13 +22,13 @@ router.get('/profile',authenticateToken,async(req,res)=>{
 
 router.put('/update-profile',authenticateToken,async (req,res)=>{
 let userId = req.user.userId;
-let {firstName,lastName,email,phone} = req.body;
+let {firstName,lastName,email,phone,photo} = req.body;
 try{
   let user = await User.findById(userId);
   if(!user){
     return res.status(404).json("Not Found");
   }
- user = await User.findByIdAndUpdate(userId,{firstName,lastName,email,phone})
+ user = await User.findByIdAndUpdate(userId,{firstName,lastName,email,phone,photo})
   await user.save();
   res.status(200).json("Success");
 }
