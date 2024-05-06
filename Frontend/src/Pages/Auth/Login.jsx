@@ -1,31 +1,33 @@
 import React from 'react'
-import axiosInstances from '../../Components/Instances/AxiosInstances';
+import SetupAxiosInstances from '../../Components/Instances/SetupAxiosInstances';
 import { useState } from 'react'
 import { Link , useNavigate } from 'react-router-dom';
-import Navbar from '../../Components/Navbar/Navbar';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 function Login() {
   let [formData, setFormData] = useState({
-    userName: '',
+    email: '',
     password: ''
   });
+  let [passwordVisible,setPasswordVisible] = useState(false);
+ const togglePassword = ()=>{
+  setPasswordVisible(!passwordVisible);
+ }
   let navigate = useNavigate();
+  const axiosInstances = SetupAxiosInstances(navigate);
   const handleChange = (e) => {
-    // let {name,value} = e.target;
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const backendApi = import.meta.env.VITE_BACKEND_API;
-      const requestUrl = `${backendApi}/auth/login`;
-      await axiosInstances.post(requestUrl, formData)
+      await axiosInstances.post('/auth/login', formData)
       .then((res)=>{
         if(res.data == 'username not exist'){
           alert("User does not exist");
         }else if(res.data == 'Incorrect Password'){
-          alert('Invalid Username or Password. Please Check again');
+          alert('Invalid Email or Password. Please Check again');
         }else if(res.status == 200){
          const token = res.data;
          localStorage.setItem('token',token);
@@ -41,27 +43,38 @@ function Login() {
         console.log("Failed to Login axios error: ",e);
       })
     } catch (error) {
-      console.error('Registration error:', error);
+      console.error('Login form error:', error);
     }
   };
 
   return (
-    <>
-    <Navbar/>
-     <div className="flex justify-center">
-      <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+    <div className='flex min-h-screen bg-cover items-center justify-around' style={{backgroundImage:'url(/Assets/landing.avif)'}}>
+      <div className='flex flex-col items-center justify-center'>
+        <p className='font-bold text-3xl mb-2'>Hello!</p>
+       <p className='font-semibold text-2xl mb-2 text-white'>Don't have a account yet?</p>
+       <Link to={'/auth/register'} className='mt-2'><button className='bg-blue-500 text-white py-2 px-4 rounded-md w-72 hover:bg-blue-700 font-medium'>Create an account</button></Link>
+      </div>
+     <div className="flex justify-center bg-white py-2 px-10 rounded-lg">
+      <form onSubmit={handleSubmit} className="mt-6 space-y-6">
         <div>
-          <h2 className="text-3xl mb-4">Login</h2>
-          <input type="text" name="userName" placeholder="User Name" onChange={handleChange} className="rounded-md border-gray-400 border p-2 mb-2 w-full" required />
-          <input type="password" name="password" placeholder="Password" onChange={handleChange} className="rounded-md border-gray-400 border p-2 mb-2 w-full" required />
+          <h2 className="text-2xl mb-4 font-bold">FriendsBook</h2>
+          <h2 className='text-xl font-semibold'>Welcome Back!!</h2>
+          <h2 className='text-md font-medium mb-2 text-gray-500'>Sign in to continue</h2>
+          <label htmlFor="user" className='font-medium'>Email</label>
+          <br />
+          <input type="email" name="email" placeholder="Email address" id='user' onChange={handleChange} className="rounded-md border-gray-400 border p-2 mb-3 w-64" required />
+          <br />
+          <label htmlFor="pass" className='font-medium'>Password</label>
+          <br />
+          <div className='relative'>
+          <input type={passwordVisible ? 'text' : 'password'} name="password" placeholder="Password" id='pass' onChange={handleChange} className="rounded-md border-gray-400 border p-2 mb-3 w-64" required />
+          <button className='absolute inset-y-0 right-2 mb-3' type='button' onClick={togglePassword}>{passwordVisible ? <FiEye/> : <FiEyeOff/>}</button>
+          </div>
+          <button type="submit" className="bg-blue-500 text-white rounded-md px-4 py-2 w-full hover:bg-blue-700 mt-4 mb-10"> Login </button>
         </div>
-        <div>
-          <button type="submit" className="bg-blue-500 text-white rounded-md px-4 py-2 w-full hover:bg-blue-600"> Login </button>
-        </div>
-        <p className='text-xl'>Do not have a account ? Click to <span className='text-blue-600'><Link to={'/auth/register'}>Sign up</Link></span></p>
       </form>
     </div>
-    </>
+    </div>
   );
 }
 

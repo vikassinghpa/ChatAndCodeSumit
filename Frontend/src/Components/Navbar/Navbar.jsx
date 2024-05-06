@@ -18,7 +18,6 @@ function Navbar() {
       localStorage.removeItem('token');
       localStorage.removeItem('expirationTime');
       setIsLoggedIn(false);
-      navigate('/auth/login');
     }
   },[])
 

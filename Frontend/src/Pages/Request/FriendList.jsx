@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import axiosInstances from '../../Components/Instances/AxiosInstances'
 import Navbar from '../../Components/Navbar/Navbar';
-
+import { useNavigate } from 'react-router-dom';
+import SetupAxiosInstances from '../../Components/Instances/SetupAxiosInstances';
 function FriendList() {
   let [data,setData] = useState([]);
-  const backendApi = import.meta.env.VITE_BACKEND_API;
+  let navigate = useNavigate();
+  const axiosInstances = SetupAxiosInstances(navigate);
   useEffect(()=>{
     getData();
   },[])
   async function getData(){
-    const requestUrl = `${backendApi}/user/friend-list`;
-    await axiosInstances.get(requestUrl)
+    await axiosInstances.get('/user/friend-list')
     .then((res)=>{
-     if(res.status == 200){
+       if(res.status == 200){
       setData(res.data);
      }
     })

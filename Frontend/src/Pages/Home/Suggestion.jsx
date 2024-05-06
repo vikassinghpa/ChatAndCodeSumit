@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import axiosInstances from '../../Components/Instances/AxiosInstances'
 import Navbar from '../../Components/Navbar/Navbar';
+import { useNavigate } from 'react-router-dom';
+import SetupAxiosInstances from '../../Components/Instances/SetupAxiosInstances';
 
 function Suggestion() {
   let [data,setData] = useState([]);
-  const backendApi = import.meta.env.VITE_BACKEND_API;
+  let navigate = useNavigate();
+  const axiosInstances = SetupAxiosInstances(navigate);
   
   useEffect(()=>{
   async function getData(){
-    const requestUrl = `${backendApi}/user/friends`;
-    await axiosInstances.get(requestUrl)
+    let res = await axiosInstances.get('/user/friends')
     .then((res)=>{
-      if(res.status == 200){
+       if(res.status == 200){
         setData(res.data);
       }
     })
@@ -23,8 +24,7 @@ function Suggestion() {
   },[])
 
   async function handleAdd(receiverId){
-    const sendRequest = `${backendApi}/user/send-request`;
-    await axiosInstances.post(sendRequest,{receiverId})
+    await axiosInstances.post('/user/send-request',{receiverId})
     .then((res)=>{
      if(res.data == 'Success'){
       alert("send the requested successfully");

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import axiosInstances from '../../Components/Instances/AxiosInstances';
+import SetupAxiosInstances from '../../Components/Instances/SetupAxiosInstances';
 import Navbar from '../../Components/Navbar/Navbar';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,16 +10,14 @@ function AddPost() {
     desc:''
   })
   let navigate = useNavigate();
-
+  const axiosInstances = SetupAxiosInstances(navigate);
   function handleChange(e){
     const {name,value} = e.target;
     setForm({...form,[name]:value});
   }
   async function handleSubmit(e){
     e.preventDefault();
-    const BackendAPI = import.meta.env.VITE_BACKEND_API;
-    const requestUrl = `${BackendAPI}/user/add-post`;
-    await axiosInstances.post(requestUrl,form)
+    await axiosInstances.post('/user/add-post',form)
     .then((res)=>{
      if(res.data == 'Success'){
       alert("Post added Successfully.")

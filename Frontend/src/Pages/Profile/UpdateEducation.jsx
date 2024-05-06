@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import axiosInstances from '../../Components/Instances/AxiosInstances'
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../Components/Navbar/Navbar';
-
+import SetupAxiosInstances from '../../Components/Instances/SetupAxiosInstances';
 function UpdateEducation() {
   let [formdata,setFormData] = useState({
     school:{
@@ -17,6 +16,7 @@ function UpdateEducation() {
     }
   })
   let navigate = useNavigate();
+  const axiosInstances = SetupAxiosInstances(navigate);
   function handleChange(e){
     const {name,value} = e.target;
     if(name.startsWith('school.')){
@@ -31,12 +31,9 @@ function UpdateEducation() {
   }
   async function handleSubmit(e){
     e.preventDefault();
-    const BackendUrl = import.meta.env.VITE_BACKEND_API;
-    const requestUrl = `${BackendUrl}/user/update-education`;
-    await axiosInstances.put(requestUrl,formdata)
+    await axiosInstances.put('/user/update-education',formdata)
     .then((res)=>{
       if(res.status == 200){
-        console.log("frontend: ",formdata);
         navigate('/user/profile')
         alert("successfully updated the user's education.")
       }

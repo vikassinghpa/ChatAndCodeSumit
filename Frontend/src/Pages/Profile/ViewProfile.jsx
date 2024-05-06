@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
-import axiosInstances from '../../Components/Instances/AxiosInstances';
+import { Link,useNavigate } from 'react-router-dom';
 import Navbar from '../../Components/Navbar/Navbar';
-
+import SetupAxiosInstances from '../../Components/Instances/SetupAxiosInstances';
 
 function ViewProfile() {
   let [data,setData] = useState(null);
   let [pictureLoad,setPictureLoad] = useState(false);
-  const backendApi = import.meta.env.VITE_BACKEND_API;
+  let navigate = useNavigate();
+  const axiosInstances = SetupAxiosInstances(navigate);
   useEffect(()=>{
     async function getData(){
-      const requestUrl = `${backendApi}/user/profile`;
-      await axiosInstances.get(requestUrl)
+      await axiosInstances.get('/user/profile')
       .then((res)=>{
       setData(res.data);
       })
@@ -21,10 +20,9 @@ function ViewProfile() {
     }
     getData();
   },[])
-
+  
   async function DeleteEducation(){
-    const deleteUrl = `${backendApi}/user/delete-education`
-    await axiosInstances.delete(deleteUrl)
+    await axiosInstances.delete('/user/delete-education')
     .then((res)=>{
      if(res.status == 200){
       alert('Successfully deleted the education.')

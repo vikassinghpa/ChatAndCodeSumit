@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import axiosInstances from '../../Components/Instances/AxiosInstances';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import NavBar from '../../Components/Navbar/Navbar';
+import SetupAxiosInstances from '../../Components/Instances/SetupAxiosInstances';
 
 function ViewPost() {
   let [data ,setData] = useState([]);
-  const BackendAPI = import.meta.env.VITE_BACKEND_API;
   useEffect(()=>{
     getData();
   },[])
+  let navigate = useNavigate();
+  const axiosInstances = SetupAxiosInstances(navigate);
   async function getData(){
-    const requestUrl = `${BackendAPI}/user/my-posts`;
-  await axiosInstances.get(requestUrl)
+  await axiosInstances.get('/user/my-posts')
   .then((res)=>{
   setData(res.data);
   })
@@ -21,8 +21,7 @@ function ViewPost() {
   }
 
   async function handleDelete(id){
-    const deleteUrl = `${BackendAPI}/user/delete-post/${id}`;
-    await axiosInstances.delete(deleteUrl)
+    await axiosInstances.delete(`/user/delete-post/${id}`)
     .then((res)=>{
      if(res.data == 'Success'){
       alert("Post deleted Successfully.")
