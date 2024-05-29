@@ -34,7 +34,6 @@ let userSchema = new mongoose.Schema(
     education: {
       type: mongoose.Types.ObjectId,
       ref: "Education",
-      // autopopulate:true
     },
     phone: {
       type: Number,
@@ -42,15 +41,12 @@ let userSchema = new mongoose.Schema(
       minlength:10,
     },
     group: [{ type: mongoose.Types.ObjectId, ref: "Group",
-    // autopopulate:true 
   }],
 
     post: [{ type: mongoose.Types.ObjectId, ref: "Post",
-    // autopopulate:true
    }],
 
     friend: [{ type: mongoose.Types.ObjectId, ref: "User",
-    // autopopulate:true 
   }],
    friendRequest:[{
     from:{
@@ -64,11 +60,13 @@ let userSchema = new mongoose.Schema(
     }
    }],
     notification: [{ type: mongoose.Types.ObjectId, ref: "Notification",
-    // autopopulate:true 
   }],
+  chats:[{
+    type:mongoose.Types.ObjectId,
+    ref:"Chat"
+  }]
   },
   { timestamps: true }
 );
-// userSchema.plugin(require("mongoose-autopopulate"));
 let User = mongoose.model("User", userSchema);
 module.exports = User;

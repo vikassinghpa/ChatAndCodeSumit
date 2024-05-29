@@ -44,7 +44,7 @@ router.post('/login',async (req,res)=>{
         username:user.userName,
       }
       const token = jwt.sign(payload,process.env.ACCESS_TOKEN_SECRET,{expiresIn:'3h'});
-      res.json(token)
+      res.json({token:token,userId:payload.userId});
     }else{
       res.json("Incorrect Password");
     }

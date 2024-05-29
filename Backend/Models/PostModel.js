@@ -4,7 +4,6 @@ let postSchema= new mongoose.Schema({
     userId:{
         type:mongoose.Types.ObjectId,
         ref:"User",
-        // autopopulate:true
     },
     title:{
         type:String,
@@ -22,6 +21,5 @@ let postSchema= new mongoose.Schema({
         required:true
     }
 },{timestamps:true})
-// postSchema.plugin(require("mongoose-autopopulate"))
 let Post=mongoose.model("Post",postSchema);
 module.exports= Post;

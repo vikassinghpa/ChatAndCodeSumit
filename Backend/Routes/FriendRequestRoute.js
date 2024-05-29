@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('../Models/UserModel');
+const Chat = require('../Models/ChatModel');
 const router = express.Router();
 const Notification = require('../Models/Notification');
 const {authenticateToken} = require('../middleware');
@@ -8,8 +9,6 @@ router.get('/friends',authenticateToken,async(req,res)=>{
 let userId = req.user.userId;
 try{
   let user = await User.findById(userId);
- // let allUser = await User.find({}).select('firstName lastName userName email friend');
-  // let suggested = allUser.filter(x => x._id != userId);
   let friendsUser = user.friend;
   let suggested = await User.find({_id:{$nin:[userId,...friendsUser]}}).select('firstName lastName userName email');
   res.status(200).json(suggested);
@@ -98,10 +97,19 @@ try{
   if(receiverFriend){
     return res.status(200).json("Already Exist");
   }
-  await sender.friend.push(receiverId);
+  sender.friend.push(receiverId);
   await sender.save();
-  await receiver.friend.push(userId);
+  receiver.friend.push(userId);
   await receiver.save();
+  let chat = await Chat.findOne({$or:[{source:userId,target:{$all:[userId,receiverId]},isGroupChat:false},{source:receiverId,target:{$all:[userId,receiverId]},isGroupChat:false}]});
+  if(chat == null){
+    chat = new Chat({source:userId,target:[receiverId,userId]});
+    await chat.save();
+    sender.chats.push(chat._id);
+    receiver.chats.push(chat._id);
+    await sender.save();
+    await receiver.save();
+  }
   await User.findByIdAndUpdate(userId,{$pull:{friendRequest:{from:receiverId}}});
   let oldNotification = await Notification.findOne({
     receiver: userId,

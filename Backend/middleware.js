@@ -18,6 +18,17 @@ const authenticateToken = (req,res,next)=>{
   })
 }
 
+const authenticateSocket = (socket, next) => {
+  const token = socket.handshake.auth.token; 
+  jwt.verify(token,process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+    if (err) {
+      return next("Authentication error")
+    };
+    socket.userId = decoded.userId;
+    next();
+  });
+};
+
 const isPostOwner = async(req,res,next)=>{
   let {id} = req.params;
   const post = await Post.findById(id);
@@ -30,4 +41,5 @@ const isPostOwner = async(req,res,next)=>{
   next();
 }
 
-module.exports = {authenticateToken , isPostOwner};
+
+module.exports = {authenticateToken , isPostOwner,authenticateSocket};

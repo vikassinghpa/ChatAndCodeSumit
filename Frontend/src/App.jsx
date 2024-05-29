@@ -13,12 +13,16 @@ import Suggestion from './Pages/Home/Suggestion'
 import Notify from './Pages/Home/Notify'
 import FriendRequest from './Pages/Request/FriendRequest'
 import FriendList from './Pages/Request/FriendList'
+import Chat from './Components/Chat'
+import Chats from './Components/Chats'
 
 function App() {
   return (
     <div>
       <Routes>
         <Route path='/' element={<Home/>}/>
+        <Route path='/chat' element={<Chat/>}/>
+        <Route path='/user/chat' element={<Chats/>}/>
         <Route path='/auth/register' element={<Register/>}/>
         <Route path='/auth/login' element={<Login/>}/>
         <Route path='/user/profile' element={<ViewProfile/>}/>

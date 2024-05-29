@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../../Components/Navbar/Navbar';
 import { useNavigate } from 'react-router-dom';
 import SetupAxiosInstances from '../../Components/Instances/SetupAxiosInstances';
+import FriendCard from '../../Components/FriendCard';
 function FriendList() {
   let [data,setData] = useState([]);
   let navigate = useNavigate();
@@ -23,15 +24,11 @@ function FriendList() {
   return (
     <>
     <Navbar/>
-    <div>
+    <div className='relative top-14'>
     {
       data.map((item,index)=>{
         return(
-          <div key={item._id} className='bg-gray-300 mt-2 py-2 px-4 rounded-md border-2 relative'>
-            <h2>FirstName: {item.firstName}</h2>
-            <h2>lastName: {item.lastName}</h2>
-            <h2>Username: {item.userName}</h2>
-          </div>
+          <FriendCard key={item._id} item={item}/>
         )
       })
     }

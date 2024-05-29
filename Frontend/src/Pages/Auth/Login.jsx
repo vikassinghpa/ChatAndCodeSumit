@@ -29,8 +29,10 @@ function Login() {
         }else if(res.data == 'Incorrect Password'){
           alert('Invalid Email or Password. Please Check again');
         }else if(res.status == 200){
-         const token = res.data;
+         const token = res.data.token;
+         const userId = res.data.userId;
          localStorage.setItem('token',token);
+         localStorage.setItem('userId',userId);
          const expirationTime = Date.now() + 3*60*60*1000;
          localStorage.setItem('expirationTime',expirationTime);
          setTimeout(()=>{
