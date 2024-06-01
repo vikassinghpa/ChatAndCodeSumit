@@ -22,7 +22,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/chat' element={<Chat/>}/>
-        <Route path='/user/chat' element={<Chats/>}/>
+        {/* <Route path='/user/chat' element={<Chats/>}/> */}
         <Route path='/auth/register' element={<Register/>}/>
         <Route path='/auth/login' element={<Login/>}/>
         <Route path='/user/profile' element={<ViewProfile/>}/>
